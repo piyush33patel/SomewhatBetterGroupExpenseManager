@@ -25,9 +25,12 @@ public class ViewLogs extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String str = "";
-
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    str += snapshot.getValue().toString();
+                    str += snapshot.child("ID").getValue().toString();
+                    str += "\t\t";
+                    str += snapshot.child("Description").getValue().toString();
+                    str += "\t\t";
+                    str += snapshot.child("Amount").getValue().toString();
                     str += "\n";
                 }
                 text.setText(str);
