@@ -18,8 +18,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ViewLogs extends AppCompatActivity {
+    static class Details{
+        String id, date, description, amount;
+        public Details(String id, String date, String description, String amount){
+            this.id = id;
+            this.date = date;
+            this.description = description;
+            this.amount = amount;
+        }
+    }
 
-    public ArrayList<String> arrayList;
+    public ArrayList<Details> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +41,14 @@ public class ViewLogs extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList = new ArrayList<>();
-                String str = "";
+                arrayList.add(new Details("ID", "DATE", "DESCRIPTION", "AMOUNT"));
+                arrayList.add(new Details("", "", "", ""));
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    arrayList.add(snapshot.child("Description").getValue().toString());
-//                    str += snapshot.child("ID").getValue().toString();
-//                    str += "\t\t";
-//                    str += snapshot.child("Description").getValue().toString();
-//                    str += "\t\t";
-//                    str += snapshot.child("Amount").getValue().toString();
-//                    str += "\n";
+                    String id = snapshot.child("ID").getValue().toString();
+                    String date = snapshot.child("Date").getValue().toString();
+                    String description = snapshot.child("Description").getValue().toString();
+                    String amount = snapshot.child("Amount").getValue().toString();
+                    arrayList.add(new Details(id, date, description, amount));
                 }
                 CustomSimpleAdapter arrayAdapter = new CustomSimpleAdapter(getApplicationContext(), arrayList);
                 listView.setAdapter(arrayAdapter);
