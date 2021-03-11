@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SomewhatBetterGroupExpenseManager">
-        <activity android:name=".ViewLogs"></activity>
+        <activity android:name=".ShowTransaction"></activity>
+        <activity android:name=".ViewLogs" />
         <activity android:name=".AddEntry" />
         <activity android:name=".MainActivity">
             <intent-filter>

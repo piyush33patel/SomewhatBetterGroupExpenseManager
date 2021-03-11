@@ -22,7 +22,7 @@
         android:id="@+id/viewLogs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Logs"
+        android:text="View Transactions"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
