@@ -21,17 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ViewLogs extends AppCompatActivity {
-    static class Details{
-        String id, date, description, amount;
-        public Details(String id, String date, String description, String amount){
-            this.id = id;
-            this.date = date;
-            this.description = description;
-            this.amount = amount;
-        }
-    }
 
-    public ArrayList<Details> arrayList;
+    public ArrayList<Transaction> arrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +30,24 @@ public class ViewLogs extends AppCompatActivity {
         setContentView(R.layout.activity_view_logs);
         ListView listView = findViewById(R.id.list_view);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList = new ArrayList<>();
-                arrayList.add(new Details("ID", "DATE", "DESCRIPTION", "AMOUNT"));
-                arrayList.add(new Details("", "", "", ""));
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String id = snapshot.child("ID").getValue().toString();
                     String date = snapshot.child("Date").getValue().toString();
                     String description = snapshot.child("Description").getValue().toString();
                     String amount = snapshot.child("Amount").getValue().toString();
-                    arrayList.add(new Details(id, date, description, amount));
+                    String deleted = snapshot.child("Deleted").getValue().toString();
+                    Transaction temp = new Transaction();
+                    temp.id = id;
+                    temp.date = date;
+                    temp.description = description;
+                    temp.amount = amount;
+                    if(deleted.equals("0"))
+                        arrayList.add(temp);
                 }
                 CustomSimpleAdapter arrayAdapter = new CustomSimpleAdapter(getApplicationContext(), arrayList);
                 listView.setAdapter(arrayAdapter);
@@ -66,7 +62,7 @@ public class ViewLogs extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ShowTransaction.class);
-                intent.putExtra("ID", arrayList.get(position).id);
+                intent.putExtra("ID", arrayList.get(position).id+"");
                 startActivity(intent);
             }
         });

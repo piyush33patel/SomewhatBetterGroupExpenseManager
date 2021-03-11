@@ -27,6 +27,7 @@ import java.util.TreeSet;
 public class AddEntry extends AppCompatActivity {
 
     static final String names[] = {"Piyush", "Kishan", "Akhilesh", "Ojas", "Vishal"};
+
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class AddEntry extends AppCompatActivity {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        String tareek = day + "/" + month + "/" + year;
+        String tareek = day + "/" + (month +1)+ "/" + year;
         date.setText(tareek);
 
         date.setOnClickListener(new View.OnClickListener() {
@@ -96,20 +97,20 @@ public class AddEntry extends AppCompatActivity {
                         String transDate = date.getText().toString();
                         String transDescription =  description.getText().toString();
                         String transAmount =  amount.getText().toString();
-                        transaction.id = Integer.valueOf(transId);
+                        transaction.id = transId;
                         transaction.date = transDate;
                         transaction.description = transDescription;
-                        transaction.amount = Integer.valueOf(transAmount);
+                        transaction.amount = transAmount;
 
                         for(int i = 0; i < names.length; i++){
                             transaction.persons[i] = new Person();
                             transaction.persons[i].name = names[i];
                             if(ratios[i].getText().toString().trim().length()==0) {
-                                transaction.persons[i].ratio = 0.0;
+                                transaction.persons[i].ratio = "0.0";
                             }
                             else {
-                                transaction.persons[i].ratio = Double.valueOf(ratios[i].getText().toString());
-                                transaction.totalRatio += transaction.persons[i].ratio;
+                                transaction.persons[i].ratio = ratios[i].getText().toString();
+                                transaction.totalRatio += Double.parseDouble(transaction.persons[i].ratio);
                             }
                             transaction.persons[i].specificDescription = specificDescription[i].getText().toString();
                         }
@@ -119,12 +120,13 @@ public class AddEntry extends AppCompatActivity {
                         map.put("Date", transaction.date);
                         map.put("Description", transaction.description);
                         map.put("Amount", transaction.amount);
+                        map.put("Deleted", transaction.deleted);
                         HashMap<String, HashMap<String, Object>> persons = new HashMap<>();
                         for(int i = 0; i < transaction.persons.length; i++){
                             HashMap<String, Object> personAttributes = new HashMap<>();
                             personAttributes.put("ratio", transaction.persons[i].ratio);
                             personAttributes.put("specific-description", transaction.persons[i].specificDescription);
-                            transaction.persons[i].share = (int)Math.ceil((transaction.amount * transaction.persons[i].ratio)/transaction.totalRatio);
+                            transaction.persons[i].share = "" + (int)Math.ceil((Double.parseDouble(transaction.amount) * Double.parseDouble(transaction.persons[i].ratio))/transaction.totalRatio);
                             personAttributes.put("share", transaction.persons[i].share);
                             persons.put(transaction.persons[i].name, personAttributes);
                         }

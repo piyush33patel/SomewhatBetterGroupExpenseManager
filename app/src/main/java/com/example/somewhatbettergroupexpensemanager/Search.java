@@ -29,7 +29,7 @@ public class Search extends AppCompatActivity {
         EditText searchBar = findViewById(R.id.search_bar);
         Button search = findViewById(R.id.search_button);
         ListView display = findViewById(R.id.display);
-
+/*
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,5 +76,7 @@ public class Search extends AppCompatActivity {
                 });
             }
         });
+
+ */
     }
 }

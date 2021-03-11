@@ -13,9 +13,9 @@ import java.util.List;
 
 public class CustomSimpleAdapter extends ArrayAdapter {
 
-    ArrayList<ViewLogs.Details> arr;
+    ArrayList<Transaction> arr;
     Context mContext;
-    public CustomSimpleAdapter(Context context, ArrayList<ViewLogs.Details> arr) {
+    public CustomSimpleAdapter(Context context, ArrayList<Transaction> arr) {
         super(context, R.layout.list_items, arr);
         this.arr = arr;
         mContext = context;
@@ -28,10 +28,10 @@ public class CustomSimpleAdapter extends ArrayAdapter {
         TextView date = view.findViewById(R.id.list_date);
         TextView description = view.findViewById(R.id.list_description);
         TextView amount = view.findViewById(R.id.list_amount);
-        id.setText(arr.get(position).id);
-        date.setText(arr.get(position).date);
-        description.setText(arr.get(position).description);
-        amount.setText(arr.get(position).amount);
+        id.setText(arr.get(position).id+"");
+        date.setText(arr.get(position).date+"");
+        description.setText(arr.get(position).description+"");
+        amount.setText(arr.get(position).amount+"");
         return view;
     }
 }
