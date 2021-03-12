@@ -49,6 +49,7 @@ public class AddEntry extends AppCompatActivity {
 
         EditText amount = findViewById(R.id.amountET);
         EditText description = findViewById(R.id.descriptionET);
+        EditText splitMode = findViewById(R.id.split_mode);
 
         Button done = findViewById(R.id.done);
         Button date = findViewById(R.id.date);
@@ -122,13 +123,30 @@ public class AddEntry extends AppCompatActivity {
                         map.put("Amount", transaction.amount);
                         map.put("Deleted", transaction.deleted);
                         HashMap<String, HashMap<String, Object>> persons = new HashMap<>();
-                        for(int i = 0; i < transaction.persons.length; i++){
-                            HashMap<String, Object> personAttributes = new HashMap<>();
-                            personAttributes.put("ratio", transaction.persons[i].ratio);
-                            personAttributes.put("specific-description", transaction.persons[i].specificDescription);
-                            transaction.persons[i].share = "" + (int)Math.ceil((Double.parseDouble(transaction.amount) * Double.parseDouble(transaction.persons[i].ratio))/transaction.totalRatio);
-                            personAttributes.put("share", transaction.persons[i].share);
-                            persons.put(transaction.persons[i].name, personAttributes);
+                        if(splitMode.getText().toString().length() == 0) {
+                            for (int i = 0; i < transaction.persons.length; i++) {
+                                HashMap<String, Object> personAttributes = new HashMap<>();
+                                personAttributes.put("ratio", transaction.persons[i].ratio);
+                                personAttributes.put("specific-description", transaction.persons[i].specificDescription);
+                                transaction.persons[i].share = "" + (int) Math.ceil((Double.parseDouble(transaction.amount) * Double.parseDouble(transaction.persons[i].ratio)) / transaction.totalRatio);
+                                personAttributes.put("share", transaction.persons[i].share);
+                                persons.put(transaction.persons[i].name, personAttributes);
+                            }
+                        }
+                        else{
+                            int numberOfAttendees = 0;
+                            for(int i = 0; i < 5; i++){
+                                if(ratios[i].getText().toString().length() > 0)
+                                        numberOfAttendees++;
+                            }
+                            for (int i = 0; i < transaction.persons.length; i++) {
+                                HashMap<String, Object> personAttributes = new HashMap<>();
+                                personAttributes.put("share", transaction.persons[i].ratio);
+                                personAttributes.put("specific-description", transaction.persons[i].specificDescription);
+                                transaction.persons[i].ratio = "" + (Double.parseDouble(transaction.persons[i].ratio)/Double.parseDouble(transaction.amount)) * numberOfAttendees;
+                                personAttributes.put("ratio", transaction.persons[i].ratio);
+                                persons.put(transaction.persons[i].name, personAttributes);
+                            }
                         }
                         map.put("Person", persons);
                         transactionsRef.push().setValue(map);

@@ -76,10 +76,10 @@ public class ShowTransaction extends AppCompatActivity {
                         for(Map.Entry it : persons.entrySet()){
                             String name = (String)it.getKey();
                             HashMap<String, Object> value = (HashMap)it.getValue();
-                            if(Integer.parseInt(value.get("share")+"")==0)
+                            if((int)Double.parseDouble(value.get("share") + "")==0)
                                 output += name + " : " + " [NIL]";
                             else
-                                output += name + " : " + value.get("share") + " [" + value.get("ratio") + "]";
+                                output += name + " : " + value.get("share") + " [" + String.format("%.2f",Double.parseDouble(value.get("ratio")+"")) + "]";
                             output += "\n\n";
                         }
                         info.setText(output);
