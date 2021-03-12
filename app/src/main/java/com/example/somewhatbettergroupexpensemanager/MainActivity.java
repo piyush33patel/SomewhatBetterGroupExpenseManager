@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button addEntry = findViewById(R.id.addEntry);
         Button viewLogs = findViewById(R.id.viewLogs);
+        Button payMe = findViewById(R.id.pay_me);
 
         addEntry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "View Logs", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(MainActivity.this, ViewLogs.class);
+                startActivity(intent);
+            }
+        });
+
+        payMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PayMe.class);
                 startActivity(intent);
             }
         });

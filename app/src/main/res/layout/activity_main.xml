@@ -16,7 +16,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32" />
+        app:layout_constraintVertical_bias="0.241" />
 
     <Button
         android:id="@+id/viewLogs"
@@ -28,7 +28,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.412" />
+
+    <Button
+        android:id="@+id/pay_me"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PAISA DE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.579"
+        tools:layout_editor_absoluteX="26dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

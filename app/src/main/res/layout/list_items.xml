@@ -34,7 +34,7 @@
         android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/list_description"
-        app:layout_constraintHorizontal_bias="0.627"
+        app:layout_constraintHorizontal_bias="0.686"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.19" />
@@ -58,20 +58,20 @@
 
     <TextView
         android:id="@+id/list_amount"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:text="AMOUNT"
-        android:textSize="17dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:text="AMOUNT"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:textSize="17dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.978"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.191" />
+        app:layout_constraintVertical_bias="0.196" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

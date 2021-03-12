@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SomewhatBetterGroupExpenseManager">
-        <activity android:name=".ShowTransaction"></activity>
+        <activity android:name=".UserTransactions"></activity>
+        <activity android:name=".PayMe" />
+        <activity android:name=".ShowTransaction" />
         <activity android:name=".ViewLogs" />
         <activity android:name=".AddEntry" />
         <activity android:name=".MainActivity">
