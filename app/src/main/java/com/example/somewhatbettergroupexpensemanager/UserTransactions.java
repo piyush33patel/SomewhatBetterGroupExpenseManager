@@ -38,7 +38,7 @@ public class UserTransactions extends AppCompatActivity {
             }
         });
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

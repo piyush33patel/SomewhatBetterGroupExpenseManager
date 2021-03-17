@@ -30,7 +30,7 @@ public class ViewLogs extends AppCompatActivity {
         setContentView(R.layout.activity_view_logs);
         ListView listView = findViewById(R.id.list_view);
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

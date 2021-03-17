@@ -33,7 +33,7 @@ public class ShowTransaction extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,15 +55,16 @@ public class ShowTransaction extends AppCompatActivity {
             }
         });
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String id = snapshot.child("ID").getValue().toString();
+                    String deleted = snapshot.child("Deleted").getValue().toString();
                     String output = "";
-                    if(id.equals(transferId)){
+                    if(id.equals(transferId) && deleted.equals("0")){
                         output += "ID : " + snapshot.child("ID").getValue().toString();
                         output += "\n\n";
                         output += "DESCRIPTION : " + snapshot.child("Description").getValue().toString();

@@ -42,7 +42,7 @@ public class PayMe extends AppCompatActivity {
             }
         });
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("individuals");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("individual");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -65,7 +65,7 @@ public class PayMe extends AppCompatActivity {
             totalPayPerPerson[i] = new Person();
             totalPayPerPerson[i].name = names[i];
         }
-        reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+        reference = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -27,6 +27,7 @@ import java.util.TreeSet;
 public class AddEntry extends AppCompatActivity {
 
     static final String names[] = {"Piyush", "Kishan", "Akhilesh", "Ojas", "Vishal"};
+    int currentID = 0;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     @Override
@@ -85,79 +86,88 @@ public class AddEntry extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference transactionsRef = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transactions");
+                DatabaseReference transactionsRef = FirebaseDatabase.getInstance().getReference().child("group-expense").child("transaction");
                 transactionsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int count = 0;
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                            count++;
-                        }
-                        Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
-                        String transId = count + "";
-                        String transDate = date.getText().toString();
-                        String transDescription =  description.getText().toString();
-                        String transAmount =  amount.getText().toString();
-                        transaction.id = transId;
-                        transaction.date = transDate;
-                        transaction.description = transDescription;
-                        transaction.amount = transAmount;
+                        DatabaseReference maxId = FirebaseDatabase.getInstance().getReference().child("group-expense").child("MaxID");
+                        maxId.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot innerDataSnapshot) {
+                                currentID = Integer.parseInt(innerDataSnapshot.getValue().toString()) + 1;
+                                Toast.makeText(getApplicationContext(), currentID + " : " + innerDataSnapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                maxId.setValue((currentID+""));
+                                Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
+                                String transId = currentID + "";
+                                String transDate = date.getText().toString();
+                                String transDescription =  description.getText().toString();
+                                String transAmount =  amount.getText().toString();
+                                transaction.id = transId;
+                                transaction.date = transDate;
+                                transaction.description = transDescription;
+                                transaction.amount = transAmount;
 
-                        for(int i = 0; i < names.length; i++){
-                            transaction.persons[i] = new Person();
-                            transaction.persons[i].name = names[i];
-                            if(ratios[i].getText().toString().trim().length()==0) {
-                                transaction.persons[i].ratio = "0.0";
-                            }
-                            else {
-                                transaction.persons[i].ratio = ratios[i].getText().toString();
-                                transaction.totalRatio += Double.parseDouble(transaction.persons[i].ratio);
-                            }
-                            transaction.persons[i].specificDescription = specificDescription[i].getText().toString();
-                        }
+                                for(int i = 0; i < names.length; i++){
+                                    transaction.persons[i] = new Person();
+                                    transaction.persons[i].name = names[i];
+                                    if(ratios[i].getText().toString().trim().length()==0) {
+                                        transaction.persons[i].ratio = "0.0";
+                                    }
+                                    else {
+                                        transaction.persons[i].ratio = ratios[i].getText().toString();
+                                        transaction.totalRatio += Double.parseDouble(transaction.persons[i].ratio);
+                                    }
+                                    transaction.persons[i].specificDescription = specificDescription[i].getText().toString();
+                                }
 
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("ID", transaction.id);
-                        map.put("Date", transaction.date);
-                        map.put("Description", transaction.description);
-                        map.put("Amount", transaction.amount);
-                        map.put("Deleted", transaction.deleted);
-                        HashMap<String, HashMap<String, Object>> persons = new HashMap<>();
-                        if(splitMode.getText().toString().length() == 0) {
-                            for (int i = 0; i < transaction.persons.length; i++) {
-                                HashMap<String, Object> personAttributes = new HashMap<>();
-                                personAttributes.put("ratio", transaction.persons[i].ratio);
-                                personAttributes.put("specific-description", transaction.persons[i].specificDescription);
-                                transaction.persons[i].share = "" + (int) Math.ceil((Double.parseDouble(transaction.amount) * Double.parseDouble(transaction.persons[i].ratio)) / transaction.totalRatio);
-                                personAttributes.put("share", transaction.persons[i].share);
-                                persons.put(transaction.persons[i].name, personAttributes);
-                            }
-                        }
-                        else{
-                            int numberOfAttendees = 0;
-                            for(int i = 0; i < 5; i++){
-                                if(ratios[i].getText().toString().length() > 0)
-                                        numberOfAttendees++;
-                            }
-                            for (int i = 0; i < transaction.persons.length; i++) {
-                                HashMap<String, Object> personAttributes = new HashMap<>();
-                                personAttributes.put("share", transaction.persons[i].ratio);
-                                personAttributes.put("specific-description", transaction.persons[i].specificDescription);
-                                transaction.persons[i].ratio = "" + (Double.parseDouble(transaction.persons[i].ratio)/Double.parseDouble(transaction.amount)) * numberOfAttendees;
-                                personAttributes.put("ratio", transaction.persons[i].ratio);
-                                persons.put(transaction.persons[i].name, personAttributes);
-                            }
-                        }
-                        map.put("Person", persons);
-                        transactionsRef.push().setValue(map);
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("ID", transaction.id);
+                                map.put("Date", transaction.date);
+                                map.put("Description", transaction.description);
+                                map.put("Amount", transaction.amount);
+                                map.put("Deleted", transaction.deleted);
+                                HashMap<String, HashMap<String, Object>> persons = new HashMap<>();
+                                if(splitMode.getText().toString().length() == 0) {
+                                    for (int i = 0; i < transaction.persons.length; i++) {
+                                        HashMap<String, Object> personAttributes = new HashMap<>();
+                                        personAttributes.put("ratio", transaction.persons[i].ratio);
+                                        personAttributes.put("specific-description", transaction.persons[i].specificDescription);
+                                        transaction.persons[i].share = "" + (int) Math.ceil((Double.parseDouble(transaction.amount) * Double.parseDouble(transaction.persons[i].ratio)) / transaction.totalRatio);
+                                        personAttributes.put("share", transaction.persons[i].share);
+                                        persons.put(transaction.persons[i].name, personAttributes);
+                                    }
+                                }
+                                else{
+                                    int numberOfAttendees = 0;
+                                    for(int i = 0; i < 5; i++){
+                                        if(ratios[i].getText().toString().length() > 0)
+                                            numberOfAttendees++;
+                                    }
+                                    for (int i = 0; i < transaction.persons.length; i++) {
+                                        HashMap<String, Object> personAttributes = new HashMap<>();
+                                        personAttributes.put("share", transaction.persons[i].ratio);
+                                        personAttributes.put("specific-description", transaction.persons[i].specificDescription);
+                                        transaction.persons[i].ratio = "" + (Double.parseDouble(transaction.persons[i].ratio)/Double.parseDouble(transaction.amount)) * numberOfAttendees;
+                                        personAttributes.put("ratio", transaction.persons[i].ratio);
+                                        persons.put(transaction.persons[i].name, personAttributes);
+                                    }
+                                }
+                                map.put("Person", persons);
+                                transactionsRef.push().setValue(map);
 
-                        // second branch
-                        DatabaseReference individual = FirebaseDatabase.getInstance().getReference().child("group-expense").child("individuals");
-                        for(int i = 0; i < names.length; i++){
-                            if(ratios[i].getText().toString().trim().length()==0 || Double.valueOf(ratios[i].getText().toString()) == 0.0)
-                                continue;
-                            individual.child(names[i]).push().setValue(count);
-                        }
+                                // second branch
+                                DatabaseReference individual = FirebaseDatabase.getInstance().getReference().child("group-expense").child("individual");
+                                for(int i = 0; i < names.length; i++){
+                                    if(ratios[i].getText().toString().trim().length()==0 || Double.valueOf(ratios[i].getText().toString()) == 0.0)
+                                        continue;
+                                    individual.child(names[i]).push().setValue(currentID+"");
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
